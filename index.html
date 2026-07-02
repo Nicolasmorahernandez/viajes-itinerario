@@ -4,12 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Itinerario de Viaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <section id="setup-screen" class="screen">
     <div class="setup-card">
+      <div class="setup-stamp">✈</div>
       <h1>Planea tu viaje</h1>
       <p class="subtitle">Dale un nombre y define las fechas para armar tu calendario.</p>
       <form id="setup-form">
@@ -40,9 +44,14 @@
         <button id="add-activity-btn" class="btn-primary">+ Actividad</button>
       </div>
     </header>
-    <div class="calendar-wrapper">
+
+    <div id="day-tabs" class="day-tabs"></div>
+
+    <div class="calendar-wrapper" id="calendar-wrapper">
       <div id="calendar-grid" class="calendar-grid"></div>
     </div>
+
+    <div id="day-list" class="day-list"></div>
   </section>
 
   <div id="modal-overlay" class="modal-overlay hidden">

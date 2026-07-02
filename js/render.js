@@ -45,6 +45,74 @@ const Render = {
     return date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
   },
 
+  dayTabs(trip, container, selectedDay, onSelect) {
+    const days = getTripDays(trip);
+    container.innerHTML = '';
+    days.forEach(day => {
+      const date = new Date(day + 'T00:00:00');
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'day-tab' + (day === selectedDay ? ' active' : '');
+      tab.innerHTML = `
+        <span class="day-tab-dow">${date.toLocaleDateString('es-ES', { weekday: 'short' })}</span>
+        <span class="day-tab-num">${date.getDate()}</span>
+      `;
+      tab.addEventListener('click', () => onSelect(day));
+      container.appendChild(tab);
+    });
+  },
+
+  dayList(trip, container, selectedDay, handlers) {
+    container.innerHTML = '';
+    const items = trip.actividades
+      .filter(a => a.dia === selectedDay)
+      .sort((a, b) => a.horaInicio.localeCompare(b.horaInicio));
+
+    if (!items.length) {
+      const empty = document.createElement('div');
+      empty.className = 'day-list-empty';
+      empty.textContent = 'No hay actividades este día todavía. Toca "+ Actividad" para agregar una.';
+      container.appendChild(empty);
+      return;
+    }
+
+    items.forEach(activity => container.appendChild(this.listCard(activity, handlers)));
+  },
+
+  listCard(activity, handlers) {
+    const cat = this.CATEGORIES.find(c => c.id === activity.categoria) || this.CATEGORIES[4];
+    const card = document.createElement('div');
+    card.className = `list-card cat-${cat.id}` + (activity.completado ? ' completado' : '');
+    card.addEventListener('click', () => handlers.onCardClick(activity));
+
+    const check = document.createElement('label');
+    check.className = 'list-check';
+    check.innerHTML = `<input type="checkbox" ${activity.completado ? 'checked' : ''}>`;
+    check.addEventListener('click', e => e.stopPropagation());
+    check.querySelector('input').addEventListener('change', () => handlers.onToggleComplete(activity));
+    card.appendChild(check);
+
+    if (activity.imagenUrl) {
+      const img = document.createElement('img');
+      img.className = 'list-image';
+      img.src = activity.imagenUrl;
+      img.alt = activity.titulo;
+      card.appendChild(img);
+    }
+
+    const body = document.createElement('div');
+    body.className = 'list-body';
+    body.innerHTML = `
+      <div class="list-time">${activity.horaInicio} – ${activity.horaFin}</div>
+      <div class="list-title">${escapeHtml(activity.titulo)}</div>
+      ${activity.ubicacion ? `<div class="list-meta">📍 ${escapeHtml(activity.ubicacion)}</div>` : ''}
+      ${activity.costo ? `<div class="list-meta">💲 $${Number(activity.costo).toLocaleString()}</div>` : ''}
+    `;
+    card.appendChild(body);
+
+    return card;
+  },
+
   grid(trip, container, handlers) {
     const days = getTripDays(trip);
     container.innerHTML = '';

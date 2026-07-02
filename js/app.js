@@ -1,10 +1,13 @@
 let trip = null;
+let selectedDay = null;
 
 const setupScreen = document.getElementById('setup-screen');
 const appScreen = document.getElementById('app-screen');
 const modalOverlay = document.getElementById('modal-overlay');
 const modalEl = document.getElementById('modal');
 const gridEl = document.getElementById('calendar-grid');
+const dayTabsEl = document.getElementById('day-tabs');
+const dayListEl = document.getElementById('day-list');
 const budgetEl = document.getElementById('budget-summary');
 const tripNameEl = document.getElementById('trip-name');
 
@@ -41,13 +44,30 @@ function showApp() {
 }
 
 function renderAll() {
+  const days = getTripDays(trip);
+  if (!selectedDay || !days.includes(selectedDay)) {
+    const today = new Date().toISOString().slice(0, 10);
+    selectedDay = days.includes(today) ? today : days[0];
+  }
+
   tripNameEl.textContent = trip.nombreViaje;
+
   Render.grid(trip, gridEl, {
     onCellClick: openCreateModal,
     onCardClick: openEditModal,
     onCellDrop: handleDrop,
     onToggleComplete: toggleComplete
   });
+
+  Render.dayTabs(trip, dayTabsEl, selectedDay, day => {
+    selectedDay = day;
+    renderAll();
+  });
+  Render.dayList(trip, dayListEl, selectedDay, {
+    onCardClick: openEditModal,
+    onToggleComplete: toggleComplete
+  });
+
   Render.budget(trip, budgetEl);
 }
 
@@ -67,7 +87,7 @@ document.getElementById('setup-form').addEventListener('submit', e => {
   showApp();
 });
 
-document.getElementById('add-activity-btn').addEventListener('click', () => openCreateModal());
+document.getElementById('add-activity-btn').addEventListener('click', () => openCreateModal(selectedDay));
 
 function openCreateModal(day, slot) {
   const days = getTripDays(trip);
