@@ -12,16 +12,34 @@ const dayListEl = document.getElementById('day-list');
 const budgetEl = document.getElementById('budget-summary');
 const tripNameEl = document.getElementById('trip-name');
 const viewToggleBtn = document.getElementById('view-toggle-btn');
+const loadingScreen = document.getElementById('loading-screen');
+const loadErrorScreen = document.getElementById('load-error-screen');
 
 async function init() {
-  trip = await Storage.load();
-  if (trip) {
+  const result = await Storage.load();
+  if (result.trip) {
+    trip = result.trip;
     normalizeTrip(trip);
     showApp();
+  } else if (result.networkError) {
+    showLoadError();
   } else {
     showSetup();
   }
 }
+
+function showLoadError() {
+  loadingScreen.classList.add('hidden');
+  setupScreen.classList.add('hidden');
+  appScreen.classList.add('hidden');
+  loadErrorScreen.classList.remove('hidden');
+}
+
+document.getElementById('retry-load-btn').addEventListener('click', () => {
+  loadErrorScreen.classList.add('hidden');
+  loadingScreen.classList.remove('hidden');
+  init();
+});
 
 function normalizeTrip(trip) {
   trip.actividades.forEach(a => {
@@ -35,11 +53,15 @@ function normalizeTrip(trip) {
 }
 
 function showSetup() {
+  loadingScreen.classList.add('hidden');
+  loadErrorScreen.classList.add('hidden');
   setupScreen.classList.remove('hidden');
   appScreen.classList.add('hidden');
 }
 
 function showApp() {
+  loadingScreen.classList.add('hidden');
+  loadErrorScreen.classList.add('hidden');
   setupScreen.classList.add('hidden');
   appScreen.classList.remove('hidden');
   renderAll();

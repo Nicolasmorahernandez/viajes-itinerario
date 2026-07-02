@@ -11,7 +11,14 @@
 </head>
 <body>
 
-  <section id="setup-screen" class="screen">
+  <section id="loading-screen" class="screen">
+    <div class="setup-card loading-card">
+      <div class="setup-stamp spin">✈</div>
+      <p class="subtitle">Cargando tu itinerario…</p>
+    </div>
+  </section>
+
+  <section id="setup-screen" class="screen hidden">
     <div class="setup-card">
       <div class="setup-stamp">✈</div>
       <h1>Planea tu viaje</h1>
@@ -33,6 +40,15 @@
         </div>
         <button type="submit" class="btn-primary">Crear itinerario</button>
       </form>
+    </div>
+  </section>
+
+  <section id="load-error-screen" class="screen hidden">
+    <div class="setup-card">
+      <div class="setup-stamp error">⚠</div>
+      <h1>No se pudo cargar</h1>
+      <p class="subtitle">No logramos conectar con la base de datos para traer tu itinerario. Puede ser tu conexión a internet. No se creó nada nuevo — tu viaje sigue guardado.</p>
+      <button id="retry-load-btn" class="btn-primary" style="width:100%">Reintentar</button>
     </div>
   </section>
 

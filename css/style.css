@@ -38,9 +38,11 @@ body {
   display: none;
 }
 
-/* Setup screen */
+/* Setup / loading / error screens */
 
-#setup-screen {
+#setup-screen,
+#loading-screen,
+#load-error-screen {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -50,6 +52,24 @@ body {
     radial-gradient(circle at 15% 20%, rgba(193, 80, 46, 0.08), transparent 40%),
     radial-gradient(circle at 85% 80%, rgba(76, 128, 101, 0.08), transparent 45%),
     var(--bg);
+}
+
+.loading-card {
+  text-align: center;
+  padding-top: 56px;
+}
+
+.setup-stamp.spin {
+  animation: spin-plane 1.4s linear infinite;
+}
+
+.setup-stamp.error {
+  background: var(--danger);
+}
+
+@keyframes spin-plane {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to { transform: translateX(-50%) rotate(360deg); }
 }
 
 .setup-card {
