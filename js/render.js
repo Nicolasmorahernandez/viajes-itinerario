@@ -74,10 +74,56 @@ const Render = {
       empty.className = 'day-list-empty';
       empty.textContent = 'No hay actividades este día todavía. Toca "+ Actividad" para agregar una.';
       container.appendChild(empty);
-      return;
+    } else {
+      items.forEach(activity => container.appendChild(this.listCard(activity, handlers, days)));
     }
 
-    items.forEach(activity => container.appendChild(this.listCard(activity, handlers, days)));
+    container.appendChild(this.freeTimeNote(trip, selectedDay));
+  },
+
+  freeTimeNote(trip, day) {
+    const WINDOW_START = timeToSlotIndex('07:00');
+    const WINDOW_END = timeToSlotIndex('23:00');
+    const size = WINDOW_END - WINDOW_START;
+    const occupied = new Array(size).fill(false);
+
+    trip.actividades
+      .filter(a => a.dia === day)
+      .forEach(a => {
+        const start = Math.max(WINDOW_START, timeToSlotIndex(a.horaInicio));
+        const end = Math.min(WINDOW_END, timeToSlotIndex(a.horaFin));
+        for (let i = start; i < end; i++) {
+          occupied[i - WINDOW_START] = true;
+        }
+      });
+
+    const ranges = [];
+    let rangeStart = null;
+    for (let i = 0; i < size; i++) {
+      if (!occupied[i] && rangeStart === null) {
+        rangeStart = i;
+      } else if (occupied[i] && rangeStart !== null) {
+        ranges.push([rangeStart, i]);
+        rangeStart = null;
+      }
+    }
+    if (rangeStart !== null) ranges.push([rangeStart, size]);
+
+    const note = document.createElement('div');
+    note.className = 'free-time-note';
+
+    if (ranges.length === 0) {
+      note.textContent = '🙌 Sin huecos libres hoy';
+    } else if (ranges.length === 1 && ranges[0][0] === 0 && ranges[0][1] === size) {
+      note.textContent = '🕐 Libre todo el día (07:00–23:00)';
+    } else {
+      const text = ranges
+        .map(([s, e]) => `${slotIndexToTime(WINDOW_START + s)}–${slotIndexToTime(WINDOW_START + e)}`)
+        .join(' · ');
+      note.textContent = `🕐 Libre: ${text}`;
+    }
+
+    return note;
   },
 
   dayListAll(trip, container, handlers) {
