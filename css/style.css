@@ -304,6 +304,17 @@ textarea {
   font-style: italic;
 }
 
+.free-time-note {
+  margin-top: 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.4;
+}
+
 /* "Ver todos los días" mode: stacked sections instead of a single day */
 
 .day-list.all-days {
