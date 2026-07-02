@@ -1,5 +1,6 @@
 let trip = null;
 let selectedDay = null;
+let mobileAllDays = false;
 
 const setupScreen = document.getElementById('setup-screen');
 const appScreen = document.getElementById('app-screen');
@@ -10,6 +11,7 @@ const dayTabsEl = document.getElementById('day-tabs');
 const dayListEl = document.getElementById('day-list');
 const budgetEl = document.getElementById('budget-summary');
 const tripNameEl = document.getElementById('trip-name');
+const viewToggleBtn = document.getElementById('view-toggle-btn');
 
 async function init() {
   trip = await Storage.load();
@@ -59,16 +61,35 @@ function renderAll() {
     onToggleComplete: toggleComplete
   });
 
-  Render.dayTabs(trip, dayTabsEl, selectedDay, day => {
-    selectedDay = day;
-    renderAll();
-  });
-  Render.dayList(trip, dayListEl, selectedDay, {
+  const listHandlers = {
     onCardClick: openEditModal,
-    onToggleComplete: toggleComplete
-  });
+    onToggleComplete: toggleComplete,
+    onMoveDay: moveActivityToDay
+  };
+
+  if (mobileAllDays) {
+    dayTabsEl.classList.add('hidden');
+    dayListEl.classList.add('all-days');
+    Render.dayListAll(trip, dayListEl, listHandlers);
+  } else {
+    dayTabsEl.classList.remove('hidden');
+    dayListEl.classList.remove('all-days');
+    Render.dayTabs(trip, dayTabsEl, selectedDay, day => {
+      selectedDay = day;
+      renderAll();
+    });
+    Render.dayList(trip, dayListEl, selectedDay, listHandlers);
+  }
+
+  viewToggleBtn.textContent = mobileAllDays ? 'Ver por día' : 'Ver todos los días';
 
   Render.budget(trip, budgetEl);
+}
+
+function moveActivityToDay(activity, newDay) {
+  activity.dia = newDay;
+  Storage.save(trip);
+  renderAll();
 }
 
 document.getElementById('setup-form').addEventListener('submit', e => {
@@ -88,6 +109,11 @@ document.getElementById('setup-form').addEventListener('submit', e => {
 });
 
 document.getElementById('add-activity-btn').addEventListener('click', () => openCreateModal(selectedDay));
+
+viewToggleBtn.addEventListener('click', () => {
+  mobileAllDays = !mobileAllDays;
+  renderAll();
+});
 
 function openCreateModal(day, slot) {
   const days = getTripDays(trip);

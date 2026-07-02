@@ -64,6 +64,7 @@ const Render = {
 
   dayList(trip, container, selectedDay, handlers) {
     container.innerHTML = '';
+    const days = getTripDays(trip);
     const items = trip.actividades
       .filter(a => a.dia === selectedDay)
       .sort((a, b) => a.horaInicio.localeCompare(b.horaInicio));
@@ -76,10 +77,40 @@ const Render = {
       return;
     }
 
-    items.forEach(activity => container.appendChild(this.listCard(activity, handlers)));
+    items.forEach(activity => container.appendChild(this.listCard(activity, handlers, days)));
   },
 
-  listCard(activity, handlers) {
+  dayListAll(trip, container, handlers) {
+    container.innerHTML = '';
+    const days = getTripDays(trip);
+
+    days.forEach(day => {
+      const section = document.createElement('div');
+      section.className = 'day-section';
+
+      const header = document.createElement('div');
+      header.className = 'day-section-header';
+      header.textContent = this.formatDayLabel(day);
+      section.appendChild(header);
+
+      const items = trip.actividades
+        .filter(a => a.dia === day)
+        .sort((a, b) => a.horaInicio.localeCompare(b.horaInicio));
+
+      if (!items.length) {
+        const empty = document.createElement('div');
+        empty.className = 'day-list-empty small';
+        empty.textContent = 'Sin actividades';
+        section.appendChild(empty);
+      } else {
+        items.forEach(activity => section.appendChild(this.listCard(activity, handlers, days)));
+      }
+
+      container.appendChild(section);
+    });
+  },
+
+  listCard(activity, handlers, days) {
     const cat = this.CATEGORIES.find(c => c.id === activity.categoria) || this.CATEGORIES[4];
     const card = document.createElement('div');
     card.className = `list-card cat-${cat.id}` + (activity.completado ? ' completado' : '');
@@ -108,6 +139,22 @@ const Render = {
       ${activity.ubicacion ? `<div class="list-meta">📍 ${escapeHtml(activity.ubicacion)}</div>` : ''}
       ${activity.costo ? `<div class="list-meta">💲 $${Number(activity.costo).toLocaleString()}</div>` : ''}
     `;
+
+    if (days && days.length > 1) {
+      const moveRow = document.createElement('div');
+      moveRow.className = 'list-move';
+      const select = document.createElement('select');
+      select.className = 'list-move-select';
+      select.innerHTML = days.map(d => `<option value="${d}" ${d === activity.dia ? 'selected' : ''}>📅 ${this.formatDayLabel(d)}</option>`).join('');
+      select.addEventListener('click', e => e.stopPropagation());
+      select.addEventListener('change', e => {
+        e.stopPropagation();
+        handlers.onMoveDay(activity, select.value);
+      });
+      moveRow.appendChild(select);
+      body.appendChild(moveRow);
+    }
+
     card.appendChild(body);
 
     return card;

@@ -34,6 +34,10 @@ body {
   display: none !important;
 }
 
+.mobile-only {
+  display: none;
+}
+
 /* Setup screen */
 
 #setup-screen {
@@ -273,6 +277,42 @@ textarea {
   font-size: 14px;
 }
 
+.day-list-empty.small {
+  padding: 10px 4px 18px;
+  text-align: left;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* "Ver todos los días" mode: stacked sections instead of a single day */
+
+.day-list.all-days {
+  gap: 4px;
+}
+
+.day-section {
+  margin-bottom: 18px;
+}
+
+.day-section-header {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  text-transform: capitalize;
+  color: var(--primary-dark);
+  background: var(--surface-alt);
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.day-section .list-card {
+  margin-bottom: 12px;
+}
+
 .list-card {
   display: flex;
   align-items: stretch;
@@ -334,6 +374,22 @@ textarea {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.list-move {
+  margin-top: 8px;
+}
+
+.list-move-select {
+  width: auto;
+  margin: 0;
+  padding: 5px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--text);
 }
 
 .list-check {
@@ -650,5 +706,16 @@ textarea {
   .header-actions {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .mobile-only {
+    display: inline-block;
+  }
+
+  .budget-summary {
+    width: 100%;
+    order: -1;
   }
 }
