@@ -8,8 +8,8 @@ const gridEl = document.getElementById('calendar-grid');
 const budgetEl = document.getElementById('budget-summary');
 const tripNameEl = document.getElementById('trip-name');
 
-function init() {
-  trip = Storage.load();
+async function init() {
+  trip = await Storage.load();
   if (trip) {
     normalizeTrip(trip);
     showApp();
