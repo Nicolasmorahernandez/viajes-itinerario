@@ -412,6 +412,31 @@ const Render = {
     if (deleteBtn) {
       deleteBtn.addEventListener('click', () => callbacks.onDelete(activity.id));
     }
+  },
+
+  detailModal(container, activity, callbacks) {
+    const cat = this.CATEGORIES.find(c => c.id === activity.categoria) || this.CATEGORIES[4];
+
+    container.innerHTML = `
+      <div class="detail-view cat-${cat.id}">
+        ${activity.imagenUrl ? `<img class="detail-image" src="${escapeHtml(activity.imagenUrl)}" alt="">` : ''}
+        <span class="detail-category">${cat.label}</span>
+        <h2 class="detail-title${activity.completado ? ' completado' : ''}">${escapeHtml(activity.titulo)}</h2>
+        <div class="detail-row">🕐 ${activity.horaInicio} – ${activity.horaFin}</div>
+        ${activity.ubicacion ? `<div class="detail-row">📍 ${escapeHtml(activity.ubicacion)}</div>` : ''}
+        ${activity.costo ? `<div class="detail-row">💲 $${Number(activity.costo).toLocaleString()}</div>` : ''}
+        ${activity.notas ? `<div class="detail-notes">${escapeHtml(activity.notas)}</div>` : ''}
+        ${activity.link ? `<a class="detail-link" href="${escapeHtml(activity.link)}" target="_blank" rel="noopener">Abrir link ↗</a>` : ''}
+        ${activity.completado ? '<div class="detail-status">✅ Actividad realizada</div>' : ''}
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="detail-close" class="btn-secondary">Cerrar</button>
+        <button type="button" id="detail-edit" class="btn-primary">Editar</button>
+      </div>
+    `;
+
+    document.getElementById('detail-close').addEventListener('click', () => callbacks.onClose());
+    document.getElementById('detail-edit').addEventListener('click', () => callbacks.onEdit());
   }
 };
 

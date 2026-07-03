@@ -714,6 +714,85 @@ textarea {
   margin-top: 8px;
 }
 
+/* Detail view: read-only activity view opened by tapping a mobile card, with an Editar button */
+
+.detail-view {
+  border-left: 5px solid var(--cat-otro);
+  padding-left: 14px;
+  margin: -4px 0 20px;
+}
+
+.detail-view.cat-transporte { border-left-color: var(--cat-transporte); }
+.detail-view.cat-alojamiento { border-left-color: var(--cat-alojamiento); }
+.detail-view.cat-comida { border-left-color: var(--cat-comida); }
+.detail-view.cat-tour { border-left-color: var(--cat-tour); }
+.detail-view.cat-otro { border-left-color: var(--cat-otro); }
+
+.detail-image {
+  width: calc(100% + 14px);
+  margin-left: -14px;
+  margin-bottom: 14px;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+.detail-category {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.detail-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  line-height: 1.25;
+}
+
+.detail-title.completado {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.detail-row {
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.detail-notes {
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface-alt);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.detail-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.detail-status {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cat-tour);
+}
+
 /* Responsive: below 700px, swap the calendar grid for the day-tabs + day-list */
 
 @media (max-width: 700px) {

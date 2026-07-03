@@ -84,7 +84,7 @@ function renderAll() {
   });
 
   const listHandlers = {
-    onCardClick: openEditModal,
+    onCardClick: openDetailModal,
     onToggleComplete: toggleComplete,
     onMoveDay: moveActivityToDay
   };
@@ -148,6 +148,14 @@ function openCreateModal(day, slot) {
 function openEditModal(activity) {
   const days = getTripDays(trip);
   Render.modal(modalEl, { activity, days }, modalCallbacks());
+  modalOverlay.classList.remove('hidden');
+}
+
+function openDetailModal(activity) {
+  Render.detailModal(modalEl, activity, {
+    onEdit: () => openEditModal(activity),
+    onClose: closeModal
+  });
   modalOverlay.classList.remove('hidden');
 }
 
