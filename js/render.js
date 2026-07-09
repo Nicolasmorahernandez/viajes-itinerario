@@ -440,7 +440,9 @@ const Render = {
         <h2 class="detail-title${activity.completado ? ' completado' : ''}">${escapeHtml(activity.titulo)}</h2>
         <div class="detail-row">🕐 ${activity.horaInicio} – ${activity.horaFin}</div>
         ${activity.ubicacion ? `<div class="detail-row">📍 ${escapeHtml(activity.ubicacion)}</div>` : ''}
-        ${activity.costo ? `<div class="detail-row">💲 $${Number(activity.costo).toLocaleString()}</div>` : ''}
+        ${activity.presupuesto ? `<div class="detail-row">💰 Presupuesto: $${Number(activity.presupuesto).toLocaleString()}</div>` : ''}
+        ${activity.gastoReal ? `<div class="detail-row">💲 Gasto real: $${Number(activity.gastoReal).toLocaleString()}</div>` : ''}
+        ${activity.pagadoPor ? `<div class="detail-row">🙋 Pagó: ${escapeHtml(activity.pagadoPor)}</div>` : ''}
         ${activity.notas ? `<div class="detail-notes">${escapeHtml(activity.notas)}</div>` : ''}
         ${activity.link ? `<a class="detail-link" href="${escapeHtml(activity.link)}" target="_blank" rel="noopener">Abrir link ↗</a>` : ''}
         ${activity.completado ? '<div class="detail-status">✅ Actividad realizada</div>' : ''}
@@ -495,7 +497,9 @@ function showPopover(activity, cardEl) {
       <div class="popover-title">${escapeHtml(activity.titulo)}</div>
       <div class="popover-meta">🕐 ${activity.horaInicio} - ${activity.horaFin}</div>
       ${activity.ubicacion ? `<div class="popover-meta">📍 ${escapeHtml(activity.ubicacion)}</div>` : ''}
-      ${activity.costo ? `<div class="popover-meta">💲 $${Number(activity.costo).toLocaleString()}</div>` : ''}
+      ${activity.presupuesto ? `<div class="popover-meta">💰 Presupuesto: $${Number(activity.presupuesto).toLocaleString()}</div>` : ''}
+      ${activity.gastoReal ? `<div class="popover-meta">💲 Gasto real: $${Number(activity.gastoReal).toLocaleString()}</div>` : ''}
+      ${activity.pagadoPor ? `<div class="popover-meta">🙋 Pagó: ${escapeHtml(activity.pagadoPor)}</div>` : ''}
       ${activity.notas ? `<div class="popover-notes">${escapeHtml(activity.notas)}</div>` : ''}
       ${activity.link ? `<div class="popover-link">🔗 ${escapeHtml(activity.link)}</div>` : ''}
     </div>
