@@ -148,13 +148,13 @@ function openCreateModal(day, slot) {
   const days = getTripDays(trip);
   const presetHoraInicio = slot !== undefined ? slotIndexToTime(slot) : undefined;
   const presetHoraFin = slot !== undefined ? slotIndexToTime(Math.min(SLOT_COUNT, slot + 2)) : undefined;
-  Render.modal(modalEl, { activity: null, presetDay: day, presetHoraInicio, presetHoraFin, days }, modalCallbacks());
+  Render.modal(modalEl, { activity: null, presetDay: day, presetHoraInicio, presetHoraFin, days, viajeros: trip.viajeros }, modalCallbacks());
   modalOverlay.classList.remove('hidden');
 }
 
 function openEditModal(activity) {
   const days = getTripDays(trip);
-  Render.modal(modalEl, { activity, days }, modalCallbacks());
+  Render.modal(modalEl, { activity, days, viajeros: trip.viajeros }, modalCallbacks());
   modalOverlay.classList.remove('hidden');
 }
 

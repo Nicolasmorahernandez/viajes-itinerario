@@ -320,13 +320,14 @@ const Render = {
     container.textContent = `Presupuesto total: $${total.toLocaleString()}`;
   },
 
-  modal(container, { activity, presetDay, presetHoraInicio, presetHoraFin, days }, callbacks) {
+  modal(container, { activity, presetDay, presetHoraInicio, presetHoraFin, days, viajeros }, callbacks) {
     const isEdit = !!activity;
     const a = activity || {
       dia: presetDay || days[0],
       horaInicio: presetHoraInicio || '07:00',
       horaFin: presetHoraFin || '08:00',
-      titulo: '', categoria: 'otro', ubicacion: '', costo: '', notas: '', link: '', imagenUrl: '', completado: false
+      titulo: '', categoria: 'otro', ubicacion: '', presupuesto: '', gastoReal: '', pagadoPor: '',
+      notas: '', link: '', imagenUrl: '', completado: false
     };
 
     container.innerHTML = `
@@ -356,8 +357,20 @@ const Render = {
         <label>Ubicación
           <input type="text" id="f-ubicacion" value="${escapeHtml(a.ubicacion || '')}">
         </label>
-        <label>Costo
-          <input type="number" id="f-costo" value="${a.costo || ''}" min="0" step="0.01">
+        <label>Presupuesto
+          <input type="number" id="f-presupuesto" value="${a.presupuesto || ''}" min="0" step="0.01">
+        </label>
+        <label>Gasto real
+          <input type="number" id="f-gasto-real" value="${a.gastoReal || ''}" min="0" step="0.01">
+        </label>
+        <label>¿Quién pagó?
+          <select id="f-pagado-por" ${(!viajeros || !viajeros.length) ? 'disabled' : ''}>
+            ${(!viajeros || !viajeros.length)
+              ? '<option value="">Agrega viajeros primero (botón Viajeros en el header)</option>'
+              : `<option value="" ${!a.pagadoPor ? 'selected' : ''}>Sin definir</option>` +
+                viajeros.map(v => `<option value="${escapeHtml(v)}" ${v === a.pagadoPor ? 'selected' : ''}>${escapeHtml(v)}</option>`).join('')
+            }
+          </select>
         </label>
         <label>Link (reserva, mapa, web)
           <input type="url" id="f-link" value="${escapeHtml(a.link || '')}">
@@ -398,7 +411,9 @@ const Render = {
         titulo: document.getElementById('f-titulo').value.trim(),
         categoria: document.getElementById('f-categoria').value,
         ubicacion: document.getElementById('f-ubicacion').value.trim(),
-        costo: document.getElementById('f-costo').value,
+        presupuesto: document.getElementById('f-presupuesto').value,
+        gastoReal: document.getElementById('f-gasto-real').value,
+        pagadoPor: document.getElementById('f-pagado-por').value,
         link: document.getElementById('f-link').value.trim(),
         imagenUrl: document.getElementById('f-imagenUrl').value.trim(),
         notas: document.getElementById('f-notas').value.trim(),
