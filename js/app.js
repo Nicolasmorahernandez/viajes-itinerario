@@ -42,6 +42,7 @@ document.getElementById('retry-load-btn').addEventListener('click', () => {
 });
 
 function normalizeTrip(trip) {
+  if (!trip.viajeros) trip.viajeros = [];
   trip.actividades.forEach(a => {
     if (!a.horaInicio) {
       a.horaInicio = a.hora || '07:00';
@@ -49,6 +50,12 @@ function normalizeTrip(trip) {
       delete a.hora;
     }
     if (a.completado === undefined) a.completado = false;
+    if (a.presupuesto === undefined) {
+      a.presupuesto = a.costo !== undefined ? a.costo : '';
+      delete a.costo;
+    }
+    if (a.gastoReal === undefined) a.gastoReal = '';
+    if (a.pagadoPor === undefined) a.pagadoPor = '';
   });
 }
 
@@ -125,7 +132,7 @@ document.getElementById('setup-form').addEventListener('submit', e => {
     return;
   }
 
-  trip = { nombreViaje, fechaInicio, fechaFin, actividades: [] };
+  trip = { nombreViaje, fechaInicio, fechaFin, actividades: [], viajeros: [] };
   Storage.save(trip);
   showApp();
 });
