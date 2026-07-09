@@ -492,6 +492,29 @@ const Render = {
     });
 
     document.getElementById('viajeros-close').addEventListener('click', () => callbacks.onClose());
+  },
+
+  budgetBreakdown(container, trip, callbacks) {
+    const viajeros = trip.viajeros || [];
+    container.innerHTML = `
+      <h2>Gasto por persona</h2>
+      ${viajeros.length ? `
+        <div class="breakdown-list">
+          ${viajeros.map(v => {
+            const total = trip.actividades
+              .filter(a => a.pagadoPor === v)
+              .reduce((sum, a) => sum + (Number(a.gastoReal) || 0), 0);
+            return `<div class="breakdown-row"><span>${escapeHtml(v)}</span><span>$${total.toLocaleString()}</span></div>`;
+          }).join('')}
+        </div>
+      ` : '<p class="subtitle">Agrega viajeros (botón Viajeros en el header) para ver el desglose por persona.</p>'}
+      <div class="modal-actions">
+        <span></span>
+        <button type="button" id="breakdown-close" class="btn-secondary">Cerrar</button>
+      </div>
+    `;
+
+    document.getElementById('breakdown-close').addEventListener('click', () => callbacks.onClose());
   }
 };
 

@@ -141,6 +141,11 @@ document.getElementById('add-activity-btn').addEventListener('click', () => open
 
 document.getElementById('viajeros-btn').addEventListener('click', openViajerosModal);
 
+budgetEl.addEventListener('click', () => {
+  Render.budgetBreakdown(modalEl, trip, { onClose: closeModal });
+  modalOverlay.classList.remove('hidden');
+});
+
 function openViajerosModal() {
   Render.viajerosModal(modalEl, trip, {
     onAdd: name => {
