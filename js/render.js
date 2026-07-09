@@ -369,7 +369,8 @@ const Render = {
             ${(!viajeros || !viajeros.length)
               ? '<option value="">Agrega viajeros primero (botón Viajeros en el header)</option>'
               : `<option value="" ${!a.pagadoPor ? 'selected' : ''}>Sin definir</option>` +
-                viajeros.map(v => `<option value="${escapeHtml(v)}" ${v === a.pagadoPor ? 'selected' : ''}>${escapeHtml(v)}</option>`).join('')
+                viajeros.map(v => `<option value="${escapeHtml(v)}" ${v === a.pagadoPor ? 'selected' : ''}>${escapeHtml(v)}</option>`).join('') +
+                (a.pagadoPor && !viajeros.includes(a.pagadoPor) ? `<option value="${escapeHtml(a.pagadoPor)}" selected>${escapeHtml(a.pagadoPor)} (ya no está en Viajeros)</option>` : '')
             }
           </select>
         </label>
