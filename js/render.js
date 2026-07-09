@@ -183,7 +183,7 @@ const Render = {
       <div class="list-time">${activity.horaInicio} – ${activity.horaFin}</div>
       <div class="list-title">${escapeHtml(activity.titulo)}</div>
       ${activity.ubicacion ? `<div class="list-meta">📍 ${escapeHtml(activity.ubicacion)}</div>` : ''}
-      ${activity.costo ? `<div class="list-meta">💲 $${Number(activity.costo).toLocaleString()}</div>` : ''}
+      ${(activity.gastoReal || activity.presupuesto) ? `<div class="list-meta">💲 $${Number(activity.gastoReal || activity.presupuesto).toLocaleString()}</div>` : ''}
     `;
 
     if (days && days.length > 1) {
@@ -316,8 +316,9 @@ const Render = {
   },
 
   budget(trip, container) {
-    const total = trip.actividades.reduce((sum, a) => sum + (Number(a.costo) || 0), 0);
-    container.textContent = `Presupuesto total: $${total.toLocaleString()}`;
+    const presupuestoTotal = trip.actividades.reduce((sum, a) => sum + (Number(a.presupuesto) || 0), 0);
+    const gastadoTotal = trip.actividades.reduce((sum, a) => sum + (Number(a.gastoReal) || 0), 0);
+    container.textContent = `Presupuesto: $${presupuestoTotal.toLocaleString()} · Gastado: $${gastadoTotal.toLocaleString()}`;
   },
 
   modal(container, { activity, presetDay, presetHoraInicio, presetHoraFin, days, viajeros }, callbacks) {
