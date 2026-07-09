@@ -455,6 +455,43 @@ const Render = {
 
     document.getElementById('detail-close').addEventListener('click', () => callbacks.onClose());
     document.getElementById('detail-edit').addEventListener('click', () => callbacks.onEdit());
+  },
+
+  viajerosModal(container, trip, callbacks) {
+    const viajeros = trip.viajeros || [];
+    container.innerHTML = `
+      <h2>Viajeros</h2>
+      <div class="viajeros-list">
+        ${viajeros.length ? viajeros.map(v => `
+          <div class="viajero-row">
+            <span>${escapeHtml(v)}</span>
+            <button type="button" class="viajero-remove" data-name="${escapeHtml(v)}">✕</button>
+          </div>
+        `).join('') : '<p class="subtitle">Todavía no agregaste viajeros.</p>'}
+      </div>
+      <form id="viajero-form">
+        <label>Nombre
+          <input type="text" id="f-viajero-nombre" placeholder="Ej. Nico" required>
+        </label>
+        <div class="modal-actions">
+          <button type="button" id="viajeros-close" class="btn-secondary">Cerrar</button>
+          <button type="submit" class="btn-primary">Agregar</button>
+        </div>
+      </form>
+    `;
+
+    container.querySelectorAll('.viajero-remove').forEach(btn => {
+      btn.addEventListener('click', () => callbacks.onRemove(btn.dataset.name));
+    });
+
+    document.getElementById('viajero-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const input = document.getElementById('f-viajero-nombre');
+      const name = input.value.trim();
+      if (name) callbacks.onAdd(name);
+    });
+
+    document.getElementById('viajeros-close').addEventListener('click', () => callbacks.onClose());
   }
 };
 

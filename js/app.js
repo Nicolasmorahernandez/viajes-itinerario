@@ -139,6 +139,25 @@ document.getElementById('setup-form').addEventListener('submit', e => {
 
 document.getElementById('add-activity-btn').addEventListener('click', () => openCreateModal(selectedDay));
 
+document.getElementById('viajeros-btn').addEventListener('click', openViajerosModal);
+
+function openViajerosModal() {
+  Render.viajerosModal(modalEl, trip, {
+    onAdd: name => {
+      if (!trip.viajeros.includes(name)) trip.viajeros.push(name);
+      Storage.save(trip);
+      openViajerosModal();
+    },
+    onRemove: name => {
+      trip.viajeros = trip.viajeros.filter(v => v !== name);
+      Storage.save(trip);
+      openViajerosModal();
+    },
+    onClose: closeModal
+  });
+  modalOverlay.classList.remove('hidden');
+}
+
 viewToggleBtn.addEventListener('click', () => {
   mobileAllDays = !mobileAllDays;
   renderAll();
