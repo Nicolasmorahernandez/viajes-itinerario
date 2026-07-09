@@ -228,6 +228,7 @@ textarea {
   font-size: 14px;
   font-weight: 600;
   color: var(--text-muted);
+  cursor: pointer;
 }
 
 /* Day tabs (mobile day switcher) */
@@ -712,6 +713,44 @@ textarea {
   align-items: center;
   justify-content: space-between;
   margin-top: 8px;
+}
+
+.viajeros-list {
+  margin-bottom: 16px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.viajero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.viajero-remove {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.breakdown-list {
+  margin-bottom: 16px;
+}
+
+.breakdown-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  font-weight: 600;
 }
 
 /* Detail view: read-only activity view opened by tapping a mobile card, with an Editar button */
